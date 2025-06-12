@@ -74,7 +74,10 @@ Remember `ℕ = {0, 1, 2, ...}`, the natural numbers.
 
 @[autograded 2]
 theorem problem_1a : ∃ n : ℕ, ∀ x : ℕ, n ≤ x := by
-  
+  existsi 0
+  fix x
+  positivity
+  done
 
 
 /-
@@ -86,7 +89,10 @@ What if we swap them? The proof game changes!
 
 @[autograded 2]
 theorem problem_1b : ∀ n : ℕ, ∃ x : ℕ, n ≤ x := by
-  
+  fix x
+  existsi x
+  linarith
+  done
 
 /-
 
@@ -129,7 +135,8 @@ First, practice an introduction:
 
 @[autograded 1]
 theorem problem_2 : 220 ∣ 880 := by
-
+  numbers
+  done
 
 /-
 
@@ -140,7 +147,12 @@ is also a divisor of 88.
 
 @[autograded 3]
 theorem problem_3 : ∀ x : ℕ, x ∣ 22 → x ∣ 88 := by
-  
+  fix x
+  assume h1
+  eliminate h1 with t h2
+  existsi (4*t)
+  linarith
+  done
 
 
 
@@ -174,7 +186,11 @@ No need to start with `assume`.
 
 @[autograded 3]
 theorem problem_4 (a b : ℤ) (h : ∀ x : ℤ, 2*a ≤ x ∨ x ≤ 2*b) : a ≤ b := by
-  
+  have h2 : 2*a ≤ (a+b) ∨ (a+b) ≤ 2*b := h ((a+b))
+  eliminate h2 with h3 h4
+  linarith
+  linarith
+  done
 
 
 /-
@@ -222,11 +238,26 @@ can you state and use?
 -/
 
 theorem bonus_challenge (p : Prop) (hp : p): ¬ (p ↔ ¬ p) := by
-  
+  by_contra h
+  eliminate h with h1 h2
+  have hnp: ¬ p := h1 hp
+  contradiction
 
-
+/-
+I gamed the system there by putting (hp : p) in manually (it wasn't normally
+next to p : Prop). I cannot figure this out otherwise. If we have p or ¬p
+this becomes easy. After the "eliminate" line, we have h1 : p → ¬p
+h2 : ¬p → p. With either p or ¬ p, we can get the other, and hence a
+contradction. That's why the above one works so well. I don't know how to get
+p otherwise. I've been at this for hours. My best attempt was this:
+-/
 theorem bonus_challenge_real (p : Prop) : ¬ (p ↔ ¬ p) := by
-  
+  by_contra h
+  eliminate h with h1 h2
+  have hyp: ¬ p → ((p → ¬ p))
+  assume h3
+  assumption
+  sorry
 
 
 /-
