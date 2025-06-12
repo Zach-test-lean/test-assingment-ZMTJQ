@@ -24,4 +24,4 @@ jobs:
       # Run the autograder with the student's submission
       - name: Run Lean Autograder
         run: |
-          lake exe autograder --local Homework02.lean AutograderTests/Homework02-2.lean
+          lake exe autograder --local Homework02.lean AutograderTests/Solution.lean
