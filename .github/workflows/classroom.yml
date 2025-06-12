@@ -24,31 +24,4 @@ jobs:
       # Run the autograder with the student's submission
       - name: Run Lean Autograder
         run: |
-          lake exe autograder --local Homework02.lean name: Lean Autograder
-
-on: [push, pull_request]
-
-jobs:
-  autograde:
-    runs-on: ubuntu-latest
-
-    steps:
-      # Checkout the student's code (i.e., this repo)
-      - uses: actions/checkout@v3
-
-      # Install Lean using elan (Lean's version manager)
-      - name: Install Lean via Elan
-        run: |
-          curl -s https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | bash -s -- -y
-          echo "$HOME/.elan/bin" >> $GITHUB_PATH
-
-      # Run lake to build the project (including the autograder)
-      - name: Build with lake
-        run: |
-          lake build
-
-      # Run the autograder with the student's submission
-      - name: Run Lean Autograder
-        run: |
           lake exe autograder --local Homework02.lean AutograderTests/Homework02-2.lean
-
